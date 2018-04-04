@@ -13,6 +13,12 @@ class ParkingSpot(models.Model):
 
     @staticmethod
     def create_point(lat, lng):
+        """
+        "X and Y coordinates". X is longitude, Y is latitude.
+        :param lat:
+        :param lng:
+        :return:
+        """
         return fromstr("POINT(%s %s)" % (lng, lat))
 
     @staticmethod
@@ -20,6 +26,12 @@ class ParkingSpot(models.Model):
         ref_point = ParkingSpot.create_point(lat, lng)
         return ParkingSpot.objects.filter(
             location__distance_lte=(ref_point, Distance(m=radius_meters)))
-            # todo add distance from the ref_point
-            # .distance(ref_point).order_by('distance')
+        # todo add distance from the ref_point
+        # .distance(ref_point).order_by('distance')
 
+
+class Reservation(models.Model):
+    user_id = models.IntegerField()
+    parkingspot = models.ForeignKey(ParkingSpot, on_delete=models.CASCADE)
+    reservation_date = models.DateTimeField('reservation date')
+    create_date = models.DateTimeField('creation date')

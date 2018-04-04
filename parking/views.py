@@ -1,7 +1,6 @@
-import json
 import logging
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from parking.models import ParkingSpot
 
@@ -22,8 +21,8 @@ def available(request):
     for result in query_result_set:
         result_set.append({
             'id': result.id,
-            'lat': result.location.x,
-            'lng': result.location.y,
+            'lng': result.location.x,
+            'lat': result.location.y,
             'address': result.address
         })
 
@@ -35,6 +34,5 @@ def available(request):
         },
         'result': result_set
     }
-    response = json.dumps(response)
     logger.info(response)
-    return HttpResponse(response)
+    return JsonResponse(response)

@@ -1,3 +1,4 @@
+import json
 import logging
 
 from django.test import TestCase
@@ -11,6 +12,8 @@ logger = logging.getLogger(__name__)
 def create_parking_spots():
     ParkingSpot.objects.create(location=ParkingSpot.create_point(37.781533, -122.39661),
                                address='468 3rd St, San Francisco, CA 94107, USA')
+    ParkingSpot.objects.create(location=ParkingSpot.create_point(37.8079996, -122.4177434),
+                               address='Fisherman\'s Wharf, San Francisco, CA, USA')
 
 
 class ParkingModelTests(TestCase):
@@ -46,10 +49,11 @@ class ParkingIndexViewTests(TestCase):
         response = self.request_available(1, 1, 1)
         self.assertEqual(response.status_code, 200)
         logger.debug(response)
+        json_data = json.loads(response.content)
+        self.assertEquals(json_data['hits']['from'], 0)
         self.assertContains(response, """{"hits": {"from": 0, "page_size": 0, "total": 0}, "result": []}""")
 
-    def test_list_parking_spots(self):
-
+    def test_list_parking_spots_within_10_meters(self):
         create_parking_spots()
 
         lat = 37.781533
@@ -57,11 +61,26 @@ class ParkingIndexViewTests(TestCase):
         radius = 10
         response = self.request_available(lat, lng, radius)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response,
-                            """{"hits": {"from": 0, "page_size": 1, "total": 1}, "result": [{"id": 1, "lat": -122.39661, "lng": 37.781533, "address": "468 3rd St, San Francisco, CA 94107, USA"}]}""")
+        json_data = json.loads(response.content)
+        self.assertEquals(len(json_data['result']), 1)
+        self.assertEquals(json_data['result'][0]['lat'], lat)
+        self.assertEquals(json_data['result'][0]['lng'], lng)
 
+        # self.assertContains(response,
+        #                     """{"hits": {"from": 0, "page_size": 1, "total": 1}, "result": [{"id": 1, "lat": -122.39661, "lng": 37.781533, "address": "468 3rd St, San Francisco, CA 94107, USA"}]}""")
 
+    def test_list_parking_spots_within_5000_meters(self):
+        create_parking_spots()
 
+        lat = 37.781533
+        lng = -122.39661
+        radius = 5000
+        response = self.request_available(lat, lng, radius)
+        self.assertEqual(response.status_code, 200)
+        json_data = json.loads(response.content)
+        self.assertEquals(len(json_data['result']), 2)
+        self.assertEquals(json_data['result'][0]['lat'], 37.781533)
+        self.assertEquals(json_data['result'][1]['lat'], 37.8079996)
 
 
 # class ReservationModelTests(TestCase):
