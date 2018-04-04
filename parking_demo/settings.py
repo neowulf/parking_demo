@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
 ]
 
 MIDDLEWARE = [
@@ -68,13 +69,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'parking_demo.wsgi.application'
 
+SPATIALITE_LIBRARY_PATH='/usr/local/miniconda2/envs/django/lib/mod_spatialite.so'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
@@ -138,7 +140,7 @@ logging.config.dictConfig({
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'mysite.log',
+            'filename': 'parking.log',
         },
     },
     'loggers': {

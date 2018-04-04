@@ -1,0 +1,6 @@
+name: parking
+dependencies:
+  - python=3.6
+  - django
+  - libgdal
+  - libspatialite
