@@ -28,7 +28,7 @@ DJANGO_LOG_LEVEL=INFO ./manage.py test parking
 ## Return parking spots given coordinates
 
 | Query Parameters | Type | Description | Required | Default |
-|---|---|---|---|
+| ---------------- | ---- | ----------- | -------- | ------- |
 | lat  |  Float | Latitude  | yes |  |
 | lng  |  Float | Longitude  |  yes  |  |
 | radius  |  Float | Radius in meters  | yes  |  |
@@ -108,7 +108,7 @@ curl -s "localhost:8000/parking/v1/parking_spots/available?lng=-122.39661&lat=37
 ## Reserve available parking spot
 
 | Json Payload Parameters | Type | Description | Required  | Default |
-|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | user_id  |  Int |  User's primary id | yes  |   |
 | parkingspot_id  | Int  | Parking spot's id  |  yes  |  |
 | start_ts  | Datetime  |  Available parking spot starting from | yes  |    |
