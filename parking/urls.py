@@ -10,7 +10,8 @@ urlpatterns = [
     path('v1/parking_spots/available', views.available, name='available'),
 
     # reserve parking spot given a time slot, parking spot id and user id
-    # path('/v1/parking_spots/reserve/<int:pk>/reserve', views.reserve, name='reserve'),
+    # put with json request body
+    path('v1/parking_spots/reserve', views.make_reservation, name='reserve'),
 
     # view existing reservations given a user id
     # cancel existing reservation given a user id and parking id

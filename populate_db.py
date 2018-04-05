@@ -1,0 +1,3 @@
+from parking.tests import create_parking_spots_and_reservations
+
+create_parking_spots_and_reservations()
